@@ -11,25 +11,27 @@ PassForge est une petite application web en TypeScript pour générer des mots d
 - Longueur et nombre de mots de passe configurables.
 - Copie individuelle et copie de tout le lot.
 
-## Démarrage
-
-1. Installer les dépendances
+## Démarrage en local
 
 ```bash
 npm install
-```
-
-2. Lancer l’application
-
-```bash
 npm run dev
 ```
 
-3. Générer une version production
+## Build
 
 ```bash
 npm run build
 ```
+
+## Déploiement GitHub Pages
+
+Ce dépôt est configuré pour déployer automatiquement sur GitHub Pages via GitHub Actions.
+
+### URL attendue
+
+Après la première exécution du workflow, l’application est disponible à :
+https://Karlos-fr.github.io/passforge/
 
 ## Architecture
 
@@ -41,4 +43,4 @@ npm run build
 
 ## Remarque sécurité
 
-La génération utilise `crypto.getRandomValues` pour une source aléatoire cryptographique dans le navigateur.
+La génération utilise `crypto.getRandomValues` pour une source aléatoire cryptographique côté navigateur.
