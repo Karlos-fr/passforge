@@ -68,3 +68,82 @@ Créer une application de génération de mots de passe en TypeScript qui permet
 - Layout: structure claire en blocs (config / actions / résultats), espacements simples.
 - Composants: cases à cocher et boutons à bordure fine, contraste propre, état hover discret.
 - Résultats: zone de sortie avec polices fixes, lignes alignées, sans animation tape-à-l'œil.
+
+## Découpage en phases
+
+### Phase 1 — Fondations
+- Initialiser l’environnement TypeScript (package, build, linting optionnel, scripts).
+- Mettre en place les fichiers de base du projet dans `src/` et une page d’entrée HTML.
+- Ajouter la structure de style (CSS global) de base.
+- Préparer la pipeline de copie locale (plan de compilation/build si nécessaire).
+
+### Phase 2 — Moteur de génération
+- Implémenter le générateur purement fonctionnel :
+  - Définition des jeux de caractères.
+  - Filtrage des caractères similaires.
+  - Sélection cryptographiquement sûre via `crypto`.
+  - Génération d’un mot de passe puis d’un lot.
+- Ajouter la validation métier :
+  - Au moins un jeu de caractères activé.
+  - Bornes minimales de longueur / nombre.
+
+### Phase 3 — Interface principale
+- Brancher les contrôles demandés :
+  - `Include digits`
+  - `Include lowercase letters`
+  - `Include uppercase letters`
+  - `Include special characters`
+  - `Exclude similar characters`
+  - `Password length`
+  - `Number of passwords`
+- Mettre en place l’affichage des résultats et des actions de copie.
+- Ajouter les états visuels (chargement/erreur/succès).
+
+### Phase 4 — Internationalisation
+- Ajouter les dictionnaires FR/EN.
+- Implémenter la détection navigateur (`navigator.language`, `navigator.languages`).
+- Fallback sur FR pour langue non supportée.
+- Ajouter bascule FR/EN + persistance locale (optionnelle).
+- Mettre à jour dynamiquement tous les libellés.
+
+### Phase 5 — Finition et livraison
+- Appliquer le style geek/épuré final (typo mono, contraste, espacements, bordures fines).
+- Vérifier accessibilité minimale (labels/attributs et navigation clavier).
+- Écrire/mettre à jour le `README.md` et les instructions d’exécution.
+- Validation finale + commit dans `passforge` + push sur GitHub.
+
+## Tâches de réalisation (checklist opérationnelle)
+- T1 — Créer les constantes et types du générateur (`character sets`, options, options model).
+- T2 — Ajouter la fonction de génération sécurisée et ses tests manuels.
+- T3 — Ajouter `validateOptions()` avec messages d’erreur i18n.
+- T4 — Construire le formulaire de configuration.
+- T5 — Connecter la génération au clic bouton et afficher un lot.
+- T6 — Ajouter les fonctions de copie individuelle et globale.
+- T7 — Créer `i18n.ts` (ou équivalent) + dictionnaires `fr`/`en`.
+- T8 — Ajouter le détecteur de langue navigateur au chargement.
+- T9 — Ajouter la sélection explicite FR/EN.
+- T10 — Intégrer le thème UI de l’app (sobriété / élégance / non génératif).
+- T11 — Vérifier en local build et comportement FR/EN.
+- T12 — Relecture et commit final avec message de version.
+
+## Avancement de réalisation
+
+- ✅ Phase 1 — Fondations
+- ✅ Phase 2 — Moteur de génération
+- ✅ Phase 3 — Interface principale
+- ✅ Phase 4 — Internationalisation
+- ✅ Phase 5 — Finition et livraison
+
+### Tâches (checklist réalisée)
+- ✅ T1 — Créer les constantes et types du générateur (`character sets`, options, options model).
+- ✅ T2 — Ajouter la fonction de génération sécurisée et ses tests manuels.
+- ✅ T3 — Ajouter `validateOptions()` avec messages d’erreur i18n.
+- ✅ T4 — Construire le formulaire de configuration.
+- ✅ T5 — Connecter la génération au clic bouton et afficher un lot.
+- ✅ T6 — Ajouter les fonctions de copie individuelle et globale.
+- ✅ T7 — Créer `i18n.ts` (ou équivalent) + dictionnaires `fr`/`en`.
+- ✅ T8 — Ajouter le détecteur de langue navigateur au chargement.
+- ✅ T9 — Ajouter la sélection explicite FR/EN.
+- ✅ T10 — Intégrer le thème UI de l’app (sobriété / élégance / non génératif).
+- ✅ T11 — Vérifier en local build et comportement FR/EN.
+- ✅ T12 — Relecture et commit final avec message de version.

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PassForge</title>
+    <script type="module" src="/src/main.ts"></script>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <header class="topbar">
+        <p class="kicker" data-i18n="kicker">PassForge</p>
+        <h1 data-i18n="appTitle">Minimal Password Forge</h1>
+        <p data-i18n="appTagline">Generate unique secrets with a clean, controlled flow.</p>
+      </header>
+
+      <main class="surface">
+        <section class="panel" aria-labelledby="settings-title">
+          <h2 id="settings-title" data-i18n="settingsTitle">Configuration</h2>
+
+          <label class="inline" for="localeSelect">
+            <span data-i18n="languageLabel">Langue</span>
+            <select id="localeSelect" aria-label="Language selector">
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+
+          <form id="generatorForm" autocomplete="off">
+            <fieldset class="grid-options">
+              <legend data-i18n="charsetLegend">Character set</legend>
+
+              <label class="option-row">
+                <input type="checkbox" id="digits" checked />
+                <span data-i18n="includeDigits">Include digits</span>
+              </label>
+              <label class="option-row">
+                <input type="checkbox" id="lowercase" checked />
+                <span data-i18n="includeLowercase">Include lowercase letters</span>
+              </label>
+              <label class="option-row">
+                <input type="checkbox" id="uppercase" checked />
+                <span data-i18n="includeUppercase">Include uppercase letters</span>
+              </label>
+              <label class="option-row">
+                <input type="checkbox" id="specials" checked />
+                <span data-i18n="includeSpecial">Include special characters</span>
+              </label>
+              <label class="option-row">
+                <input type="checkbox" id="excludeSimilar" />
+                <span data-i18n="excludeSimilar">Exclude similar characters</span>
+              </label>
+            </fieldset>
+
+            <label class="inline" for="length">
+              <span data-i18n="passwordLengthLabel">Password length</span>
+              <input
+                id="length"
+                type="number"
+                min="1"
+                max="128"
+                value="16"
+                step="1"
+                required
+              />
+            </label>
+
+            <label class="inline" for="count">
+              <span data-i18n="numberOfPasswordsLabel">Number of passwords</span>
+              <input
+                id="count"
+                type="number"
+                min="1"
+                max="50"
+                value="5"
+                step="1"
+                required
+              />
+            </label>
+
+            <div class="actions">
+              <button id="generateBtn" type="submit" data-i18n="generateButton">Generate</button>
+              <button id="resetBtn" type="button" data-i18n="resetButton">Reset</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel" aria-labelledby="results-title">
+          <div class="resultsHeader">
+            <h2 id="results-title" data-i18n="resultsTitle">Generated passwords</h2>
+            <button id="copyAllBtn" type="button" data-i18n="copyAllButton">Copy all</button>
+          </div>
+
+          <div id="status" aria-live="polite" role="status"></div>
+          <ul id="passwordList" aria-live="polite"></ul>
+          <p id="emptyState" class="muted" data-i18n="emptyState">No passwords yet.</p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

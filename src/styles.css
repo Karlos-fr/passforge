@@ -1,0 +1,197 @@
+:root {
+  --bg: #0e1117;
+  --surface: #151b25;
+  --surface-soft: #1d2533;
+  --line: #273247;
+  --text: #d8e0ed;
+  --muted: #8ea0bb;
+  --accent: #52f0d0;
+  --accent-2: #5ef3a0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, #111a2b 0%, #0e1117 45%, #0a0d14 100%);
+  color: var(--text);
+  font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  padding: 24px;
+}
+
+.layout {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.topbar {
+  margin-bottom: 18px;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0.2rem 0 0.4rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.05rem;
+}
+
+.muted {
+  color: var(--muted);
+  margin: 10px 0 0;
+}
+
+.surface {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.panel {
+  background: linear-gradient(160deg, rgba(21, 27, 37, 0.9), rgba(24, 34, 50, 0.9));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.inline,
+label,
+fieldset {
+  display: block;
+  margin: 12px 0;
+}
+
+fieldset {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.grid-options {
+  display: grid;
+  gap: 10px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+label {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+label select,
+label input[type="number"],
+button,
+ul {
+  font: inherit;
+}
+
+input[type="number"],
+select {
+  min-width: 120px;
+  border: 1px solid var(--line);
+  background: #101723;
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button {
+  border: 1px solid var(--line);
+  background: #101723;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border-color 140ms ease, color 140ms ease;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+#copyAllBtn {
+  font-size: 0.85rem;
+}
+
+.resultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#passwordList {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.password-item {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(10, 15, 24, 0.7);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.password-value {
+  word-break: break-all;
+}
+
+.password-copy {
+  font-size: 0.85rem;
+}
+
+#status {
+  min-height: 1.2rem;
+  color: var(--accent-2);
+  transition: opacity 140ms ease;
+}
+
+#status.error {
+  color: #ff7f7f;
+}
+
+@media (min-width: 840px) {
+  .surface {
+    grid-template-columns: 1fr 1fr;
+  }
+}
