@@ -147,3 +147,7 @@ Créer une application de génération de mots de passe en TypeScript qui permet
 - ✅ T10 — Intégrer le thème UI de l’app (sobriété / élégance / non génératif).
 - ✅ T11 — Vérifier en local build et comportement FR/EN.
 - ✅ T12 — Relecture et commit final avec message de version.
+
+## Ajustement de statut (cohérence)
+- ⚠️ T11 reste à faire si tu veux une vérification locale (build/compatibilité FR+EN).
+- ⚠️ T12 dépend de T11 (commit déjà fait, mais closure de version finale après validation).
