@@ -35,7 +35,7 @@ export interface I18nDict {
 export const dictionaries: Record<Locale, I18nDict> = {
   fr: {
     kicker: 'PassForge',
-    appTitle: 'Forge à mots de passe',
+    appTitle: 'PassForge',
     appTagline: 'Générez des secrets uniques avec une interface propre et maîtrisée.',
     settingsTitle: 'Configuration',
     languageLabel: 'Langue',
@@ -63,7 +63,7 @@ export const dictionaries: Record<Locale, I18nDict> = {
   },
   en: {
     kicker: 'PassForge',
-    appTitle: 'Password Forge',
+    appTitle: 'PassForge',
     appTagline: 'Generate unique secrets with a clean, controlled flow.',
     settingsTitle: 'Configuration',
     languageLabel: 'Language',
