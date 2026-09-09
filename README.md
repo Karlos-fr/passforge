@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/favicon.svg" alt="Logo PassForge" width="112" />
+  <img src="docs/assets/logo.png" alt="Logo PassForge" width="420" />
 </p>
 
 <p align="center">
@@ -65,6 +65,7 @@ src/
 ├── i18n.ts          # Traductions et détection de langue
 ├── layout.ts        # Persistance du mode élargi
 ├── main.ts          # État, rendu et interactions
+├── options-store.ts # Persistance de la configuration
 ├── seo.ts           # Métadonnées localisées côté navigateur
 ├── seo-content.json # Titres et descriptions par langue
 ├── styles.css       # Interface desktop et mobile

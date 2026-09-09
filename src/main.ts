@@ -13,6 +13,7 @@ import {
 import { generatePasswords, validateOptions, type PasswordOptions } from './generator';
 import { dictionaries, readLocale, saveLocale, supportedLocales, type I18nKey, type Locale } from './i18n';
 import { createLayoutStore } from './layout';
+import { createOptionsStore } from './options-store';
 import { updateSeoMetadata } from './seo';
 import { createThemeController, type ThemeMode } from './theme';
 import './styles.css';
@@ -55,6 +56,7 @@ const elements = {
 const storage = getStorage();
 const theme = createThemeController(document.documentElement, storage);
 const layout = createLayoutStore(storage);
+const optionsStore = createOptionsStore(storage, DEFAULTS);
 const state = {
   locale: readLocale(),
   passwords: [] as string[],
@@ -99,6 +101,21 @@ function collectOptions(): PasswordOptions {
 
 function updateGenerateAvailability(): void {
   elements.generate.disabled = validateOptions(collectOptions()).length > 0;
+}
+
+function applyOptions(options: PasswordOptions): void {
+  elements.digits.checked = options.includeDigits;
+  elements.lowercase.checked = options.includeLowercase;
+  elements.uppercase.checked = options.includeUppercase;
+  elements.specials.checked = options.includeSpecial;
+  elements.excludeSimilar.checked = options.excludeSimilar;
+  elements.length.value = String(options.passwordLength);
+  elements.count.value = String(options.numberOfPasswords);
+}
+
+function saveOptions(): void {
+  optionsStore.write(collectOptions());
+  updateGenerateAvailability();
 }
 
 function renderPasswords(): void {
@@ -160,13 +177,8 @@ function generate(event: SubmitEvent): void {
 }
 
 function reset(): void {
-  elements.digits.checked = DEFAULTS.includeDigits;
-  elements.lowercase.checked = DEFAULTS.includeLowercase;
-  elements.uppercase.checked = DEFAULTS.includeUppercase;
-  elements.specials.checked = DEFAULTS.includeSpecial;
-  elements.excludeSimilar.checked = DEFAULTS.excludeSimilar;
-  elements.length.value = String(DEFAULTS.passwordLength);
-  elements.count.value = String(DEFAULTS.numberOfPasswords);
+  applyOptions(DEFAULTS);
+  optionsStore.write(DEFAULTS);
   state.passwords = [];
   renderPasswords();
   updateGenerateAvailability();
@@ -219,7 +231,7 @@ function bindEvents(): void {
   elements.form.addEventListener('submit', generate);
   elements.reset.addEventListener('click', reset);
   [elements.digits, elements.lowercase, elements.uppercase, elements.specials, elements.excludeSimilar, elements.length, elements.count]
-    .forEach((element) => element.addEventListener('input', updateGenerateAvailability));
+    .forEach((element) => element.addEventListener('input', saveOptions));
 
   elements.locale.addEventListener('change', () => {
     const locale = supportedLocales.find((candidate) => candidate === elements.locale.value);
@@ -290,5 +302,7 @@ if (window.matchMedia('(max-width: 760px)').matches) {
 }
 applyLocaleUI();
 bindEvents();
-reset();
+applyOptions(optionsStore.read());
+renderPasswords();
+updateGenerateAvailability();
 renderIcons();

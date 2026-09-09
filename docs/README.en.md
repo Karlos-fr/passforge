@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../public/favicon.svg" alt="PassForge logo" width="112" />
+  <img src="assets/logo.png" alt="PassForge logo" width="420" />
 </p>
 
 <p align="center">

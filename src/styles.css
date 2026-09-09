@@ -142,8 +142,8 @@ button svg,
 }
 
 .brand-logo {
-  width: 25px;
-  height: 25px;
+  width: 32px;
+  height: 32px;
   display: block;
 }
 
@@ -343,20 +343,28 @@ button:disabled {
 }
 
 .select-control {
+  min-height: 40px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+  gap: 9px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .select-control select {
-  min-height: 38px;
-  padding: 0 30px 0 10px;
+  min-height: 34px;
+  max-width: 112px;
+  padding: 0 28px 0 9px;
   border: 1px solid var(--control-border);
-  border-radius: 7px;
+  border-radius: 8px;
   background: var(--surface);
   font-weight: 650;
+}
+
+#localeSelect {
+  width: 62px;
+  padding-right: 8px;
+  text-transform: uppercase;
 }
 
 .layout-toggle {
@@ -489,7 +497,7 @@ button:disabled {
   line-height: 1.5;
 }
 
-@media (max-width: 900px) and (min-width: 761px) {
+@media (max-width: 1100px) and (min-width: 761px) {
   #app {
     padding: 24px;
   }
@@ -551,6 +559,7 @@ button:disabled {
 
   .topbar {
     display: grid;
+    justify-content: normal;
     gap: 10px;
     padding: max(12px, env(safe-area-inset-top)) 16px 12px;
   }
@@ -571,13 +580,19 @@ button:disabled {
   }
 
   .select-control {
-    gap: 6px;
-    font-size: 12px;
+    gap: 8px;
   }
 
   .select-control select {
-    min-height: 36px;
-    padding-left: 8px;
+    padding-left: 9px;
+  }
+
+  .select-control > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
   }
 
   .layout-toggle {
