@@ -3,7 +3,6 @@ import {
   Copy,
   Maximize2,
   Minimize2,
-  RotateCcw,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
@@ -42,11 +41,11 @@ const elements = {
   length: required<HTMLInputElement>('#length'),
   count: required<HTMLInputElement>('#count'),
   generate: required<HTMLButtonElement>('#generateBtn'),
-  reset: required<HTMLButtonElement>('#resetBtn'),
   copyAll: required<HTMLButtonElement>('#copyAllBtn'),
   list: required<HTMLUListElement>('#passwordList'),
   empty: required<HTMLElement>('#emptyState'),
   status: required<HTMLElement>('#status'),
+  toast: required<HTMLElement>('#toastRegion'),
   layout: required<HTMLButtonElement>('#layoutToggle'),
   openSettings: required<HTMLButtonElement>('#openSettings'),
   closeSettings: required<HTMLButtonElement>('#closeSettings'),
@@ -62,6 +61,7 @@ const state = {
   passwords: [] as string[],
   expanded: layout.read(),
   statusTimer: 0,
+  toastTimer: 0,
 };
 
 function translate(key: I18nKey): string {
@@ -145,13 +145,13 @@ function renderPasswords(): void {
       if (await copyText(password)) {
         button.innerHTML = '<i data-lucide="check"></i>';
         renderIcons();
-        showStatus('copyOneSuccess');
+        showToast('copyOneSuccess');
         window.setTimeout(() => {
           button.innerHTML = '<i data-lucide="copy"></i>';
           renderIcons();
         }, 1200);
       } else {
-        showStatus('copyFailure', true);
+        showToast('copyFailure', true);
       }
     });
 
@@ -172,16 +172,7 @@ function generate(event: SubmitEvent): void {
 
   state.passwords = generatePasswords(options);
   renderPasswords();
-  showStatus('generatedSuccess');
   closeSettings();
-}
-
-function reset(): void {
-  applyOptions(DEFAULTS);
-  optionsStore.write(DEFAULTS);
-  state.passwords = [];
-  renderPasswords();
-  updateGenerateAvailability();
 }
 
 function showStatus(key: I18nKey, error = false): void {
@@ -194,8 +185,26 @@ function showStatus(key: I18nKey, error = false): void {
   }, 1800);
 }
 
+function showToast(key: I18nKey, error = false): void {
+  window.clearTimeout(state.toastTimer);
+
+  const toast = document.createElement('div');
+  const icon = document.createElement('span');
+  toast.className = error ? 'copy-toast is-error' : 'copy-toast';
+  toast.setAttribute('role', 'status');
+  icon.className = 'copy-toast-icon';
+  icon.setAttribute('aria-hidden', 'true');
+  toast.append(icon, translate(key));
+  elements.toast.replaceChildren(toast);
+
+  state.toastTimer = window.setTimeout(() => {
+    elements.toast.replaceChildren();
+  }, 1500);
+}
+
 function updateLayoutButton(): void {
   elements.shell.classList.toggle('is-expanded', state.expanded);
+  elements.layout.setAttribute('aria-pressed', String(state.expanded));
   const key: I18nKey = state.expanded ? 'collapseApp' : 'expandApp';
   elements.layout.setAttribute('aria-label', translate(key));
   elements.layout.setAttribute('title', translate(key));
@@ -229,7 +238,6 @@ async function copyText(value: string): Promise<boolean> {
 
 function bindEvents(): void {
   elements.form.addEventListener('submit', generate);
-  elements.reset.addEventListener('click', reset);
   [elements.digits, elements.lowercase, elements.uppercase, elements.specials, elements.excludeSimilar, elements.length, elements.count]
     .forEach((element) => element.addEventListener('input', saveOptions));
 
@@ -258,7 +266,7 @@ function bindEvents(): void {
   elements.copyAll.addEventListener('click', async () => {
     if (state.passwords.length === 0) return;
     const copied = await copyText(state.passwords.join('\n'));
-    showStatus(copied ? 'copyAllSuccess' : 'copyFailure', !copied);
+    showToast(copied ? 'copyAllSuccess' : 'copyFailure', !copied);
   });
   elements.openSettings.addEventListener('click', openSettings);
   elements.closeSettings.addEventListener('click', closeSettings);
@@ -276,7 +284,7 @@ function bindEvents(): void {
 
 function renderIcons(): void {
   createIcons({
-    icons: { Check, Copy, Maximize2, Minimize2, RotateCcw, ShieldCheck, SlidersHorizontal, Sparkles, X },
+    icons: { Check, Copy, Maximize2, Minimize2, ShieldCheck, SlidersHorizontal, Sparkles, X },
     attrs: { 'aria-hidden': 'true', 'stroke-width': 1.8 },
   });
 }

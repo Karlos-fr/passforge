@@ -61,8 +61,7 @@
             </div>
 
             <form id="generatorForm" autocomplete="off">
-              <fieldset class="option-group">
-                <legend data-i18n="charsetLegend">Jeux de caractères</legend>
+              <fieldset class="option-group" data-i18n-aria-label="charsetLegend">
                 <label class="check-row"><input type="checkbox" id="lowercase" checked /><span data-i18n="includeLowercase">Minuscules</span></label>
                 <label class="check-row"><input type="checkbox" id="uppercase" checked /><span data-i18n="includeUppercase">Majuscules</span></label>
                 <label class="check-row"><input type="checkbox" id="digits" checked /><span data-i18n="includeDigits">Chiffres</span></label>
@@ -81,7 +80,6 @@
 
               <div class="form-actions">
                 <button class="primary-button" id="generateBtn" type="submit"><i data-lucide="sparkles"></i><span data-i18n="generateButton">Générer</span></button>
-                <button class="icon-button reset-button" id="resetBtn" type="button" data-i18n-aria-label="resetButton" title="Réinitialiser"><i data-lucide="rotate-ccw"></i></button>
               </div>
             </form>
           </div>
@@ -95,6 +93,8 @@
               <a class="brand" href="./" aria-label="PassForge"><img class="brand-logo" src="./icon-192.png" alt="" /><span>PassForge</span></a>
               <button class="icon-button" id="openSettings" type="button" data-i18n-aria-label="openSettings"><i data-lucide="sliders-horizontal"></i></button>
             </div>
+
+            <p class="security-note"><i data-lucide="shield-check"></i><span data-i18n="secureGeneration">Génération locale sécurisée</span></p>
 
             <div class="topbar-controls">
               <label class="select-control">
@@ -112,16 +112,13 @@
                   <option value="it">IT</option><option value="es">ES</option><option value="pt">PT</option>
                 </select>
               </label>
-              <button class="icon-button layout-toggle" id="layoutToggle" type="button" data-i18n-aria-label="expandApp"><i data-lucide="maximize-2"></i></button>
+              <button class="icon-button layout-toggle" id="layoutToggle" type="button" aria-pressed="false" data-i18n-aria-label="expandApp"><i data-lucide="maximize-2"></i></button>
             </div>
           </header>
 
           <section class="results" aria-labelledby="results-title">
             <div class="results-header">
-              <div>
-                <p class="eyebrow" data-i18n="secureGeneration">Génération locale sécurisée</p>
-                <h2 id="results-title" data-i18n="resultsTitle">Mots de passe générés</h2>
-              </div>
+              <h2 id="results-title" data-i18n="resultsTitle">Mots de passe générés</h2>
               <button class="secondary-button" id="copyAllBtn" type="button" disabled><i data-lucide="copy"></i><span data-i18n="copyAllButton">Tout copier</span></button>
             </div>
             <div id="status" class="status" aria-live="polite" role="status"></div>
@@ -131,6 +128,7 @@
             </div>
           </section>
         </main>
+        <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
       </div>
     </div>
   </body>

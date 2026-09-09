@@ -7,8 +7,8 @@ export type I18nKey =
   | 'appTitle' | 'settingsTitle' | 'languageLabel' | 'themeLabel' | 'themeSystem'
   | 'themeLight' | 'themeDark' | 'charsetLegend' | 'includeDigits' | 'includeLowercase'
   | 'includeUppercase' | 'includeSpecial' | 'excludeSimilar' | 'passwordLengthLabel'
-  | 'numberOfPasswordsLabel' | 'generateButton' | 'resetButton' | 'resultsTitle'
-  | 'secureGeneration' | 'copyAllButton' | 'emptyState' | 'copyButton' | 'generatedSuccess'
+  | 'numberOfPasswordsLabel' | 'generateButton' | 'resultsTitle'
+  | 'secureGeneration' | 'copyAllButton' | 'emptyState' | 'copyButton'
   | 'copyAllSuccess' | 'copyFailure' | 'validationAtLeastOne' | 'validationLength'
   | 'validationCount' | 'copyOneSuccess' | 'expandApp' | 'collapseApp'
   | 'openSettings' | 'closeSettings';
@@ -22,9 +22,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
     includeDigits: 'Chiffres', includeLowercase: 'Minuscules', includeUppercase: 'Majuscules',
     includeSpecial: 'Caractères spéciaux', excludeSimilar: 'Exclure les caractères similaires',
     passwordLengthLabel: 'Longueur', numberOfPasswordsLabel: 'Quantité', generateButton: 'Générer',
-    resetButton: 'Réinitialiser', resultsTitle: 'Mots de passe générés', secureGeneration: 'Génération locale sécurisée',
+    resultsTitle: 'Mots de passe générés', secureGeneration: 'Génération locale sécurisée',
     copyAllButton: 'Tout copier', emptyState: 'Configurez vos options puis générez vos mots de passe.',
-    copyButton: 'Copier', generatedSuccess: 'Mots de passe générés.', copyAllSuccess: 'Tous les mots de passe sont copiés.',
+    copyButton: 'Copier', copyAllSuccess: 'Tous les mots de passe sont copiés.',
     copyFailure: 'Impossible de copier.', validationAtLeastOne: 'Activez au moins un type de caractères.',
     validationLength: 'La longueur doit être comprise entre 1 et 128.', validationCount: 'La quantité doit être comprise entre 1 et 50.',
     copyOneSuccess: 'Mot de passe copié.', expandApp: 'Agrandir l’application', collapseApp: 'Réduire l’application',
@@ -36,9 +36,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
     includeDigits: 'Digits', includeLowercase: 'Lowercase', includeUppercase: 'Uppercase',
     includeSpecial: 'Special characters', excludeSimilar: 'Exclude similar characters',
     passwordLengthLabel: 'Length', numberOfPasswordsLabel: 'Quantity', generateButton: 'Generate',
-    resetButton: 'Reset', resultsTitle: 'Generated passwords', secureGeneration: 'Secure local generation',
+    resultsTitle: 'Generated passwords', secureGeneration: 'Secure local generation',
     copyAllButton: 'Copy all', emptyState: 'Choose your options, then generate your passwords.',
-    copyButton: 'Copy', generatedSuccess: 'Passwords generated.', copyAllSuccess: 'All passwords copied.',
+    copyButton: 'Copy', copyAllSuccess: 'All passwords copied.',
     copyFailure: 'Unable to copy.', validationAtLeastOne: 'Enable at least one character type.',
     validationLength: 'Length must be between 1 and 128.', validationCount: 'Quantity must be between 1 and 50.',
     copyOneSuccess: 'Password copied.', expandApp: 'Expand application', collapseApp: 'Collapse application',
@@ -50,9 +50,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
     includeDigits: 'Ziffern', includeLowercase: 'Kleinbuchstaben', includeUppercase: 'Großbuchstaben',
     includeSpecial: 'Sonderzeichen', excludeSimilar: 'Ähnliche Zeichen ausschließen',
     passwordLengthLabel: 'Länge', numberOfPasswordsLabel: 'Anzahl', generateButton: 'Generieren',
-    resetButton: 'Zurücksetzen', resultsTitle: 'Generierte Passwörter', secureGeneration: 'Sichere lokale Generierung',
+    resultsTitle: 'Generierte Passwörter', secureGeneration: 'Sichere lokale Generierung',
     copyAllButton: 'Alle kopieren', emptyState: 'Optionen wählen und Passwörter generieren.',
-    copyButton: 'Kopieren', generatedSuccess: 'Passwörter generiert.', copyAllSuccess: 'Alle Passwörter kopiert.',
+    copyButton: 'Kopieren', copyAllSuccess: 'Alle Passwörter kopiert.',
     copyFailure: 'Kopieren nicht möglich.', validationAtLeastOne: 'Mindestens einen Zeichentyp aktivieren.',
     validationLength: 'Die Länge muss zwischen 1 und 128 liegen.', validationCount: 'Die Anzahl muss zwischen 1 und 50 liegen.',
     copyOneSuccess: 'Passwort kopiert.', expandApp: 'Anwendung vergrößern', collapseApp: 'Anwendung verkleinern',
@@ -64,9 +64,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
     includeDigits: 'Numeri', includeLowercase: 'Minuscole', includeUppercase: 'Maiuscole',
     includeSpecial: 'Caratteri speciali', excludeSimilar: 'Escludi caratteri simili',
     passwordLengthLabel: 'Lunghezza', numberOfPasswordsLabel: 'Quantità', generateButton: 'Genera',
-    resetButton: 'Reimposta', resultsTitle: 'Password generate', secureGeneration: 'Generazione locale sicura',
+    resultsTitle: 'Password generate', secureGeneration: 'Generazione locale sicura',
     copyAllButton: 'Copia tutto', emptyState: 'Scegli le opzioni e genera le password.',
-    copyButton: 'Copia', generatedSuccess: 'Password generate.', copyAllSuccess: 'Tutte le password sono state copiate.',
+    copyButton: 'Copia', copyAllSuccess: 'Tutte le password sono state copiate.',
     copyFailure: 'Impossibile copiare.', validationAtLeastOne: 'Attiva almeno un tipo di carattere.',
     validationLength: 'La lunghezza deve essere tra 1 e 128.', validationCount: 'La quantità deve essere tra 1 e 50.',
     copyOneSuccess: 'Password copiata.', expandApp: 'Ingrandisci applicazione', collapseApp: 'Riduci applicazione',
@@ -78,9 +78,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
     includeDigits: 'Números', includeLowercase: 'Minúsculas', includeUppercase: 'Mayúsculas',
     includeSpecial: 'Caracteres especiales', excludeSimilar: 'Excluir caracteres similares',
     passwordLengthLabel: 'Longitud', numberOfPasswordsLabel: 'Cantidad', generateButton: 'Generar',
-    resetButton: 'Restablecer', resultsTitle: 'Contraseñas generadas', secureGeneration: 'Generación local segura',
+    resultsTitle: 'Contraseñas generadas', secureGeneration: 'Generación local segura',
     copyAllButton: 'Copiar todo', emptyState: 'Elige las opciones y genera tus contraseñas.',
-    copyButton: 'Copiar', generatedSuccess: 'Contraseñas generadas.', copyAllSuccess: 'Todas las contraseñas copiadas.',
+    copyButton: 'Copiar', copyAllSuccess: 'Todas las contraseñas copiadas.',
     copyFailure: 'No se pudo copiar.', validationAtLeastOne: 'Activa al menos un tipo de carácter.',
     validationLength: 'La longitud debe estar entre 1 y 128.', validationCount: 'La cantidad debe estar entre 1 y 50.',
     copyOneSuccess: 'Contraseña copiada.', expandApp: 'Ampliar aplicación', collapseApp: 'Reducir aplicación',
@@ -92,9 +92,9 @@ export const dictionaries: Record<Locale, Dictionary> = {
     includeDigits: 'Números', includeLowercase: 'Minúsculas', includeUppercase: 'Maiúsculas',
     includeSpecial: 'Caracteres especiais', excludeSimilar: 'Excluir caracteres semelhantes',
     passwordLengthLabel: 'Comprimento', numberOfPasswordsLabel: 'Quantidade', generateButton: 'Gerar',
-    resetButton: 'Repor', resultsTitle: 'Palavras-passe geradas', secureGeneration: 'Geração local segura',
+    resultsTitle: 'Palavras-passe geradas', secureGeneration: 'Geração local segura',
     copyAllButton: 'Copiar tudo', emptyState: 'Escolha as opções e gere as palavras-passe.',
-    copyButton: 'Copiar', generatedSuccess: 'Palavras-passe geradas.', copyAllSuccess: 'Todas as palavras-passe foram copiadas.',
+    copyButton: 'Copiar', copyAllSuccess: 'Todas as palavras-passe foram copiadas.',
     copyFailure: 'Não foi possível copiar.', validationAtLeastOne: 'Ative pelo menos um tipo de carácter.',
     validationLength: 'O comprimento deve estar entre 1 e 128.', validationCount: 'A quantidade deve estar entre 1 e 50.',
     copyOneSuccess: 'Palavra-passe copiada.', expandApp: 'Expandir aplicação', collapseApp: 'Reduzir aplicação',
