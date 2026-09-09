@@ -3,98 +3,135 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PassForge</title>
+    <meta name="theme-color" content="#0b1115" />
+    <meta data-seo="description" name="description" content="Générez instantanément des mots de passe robustes et uniques dans votre navigateur." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PassForge" />
+    <meta data-seo="og-title" property="og:title" content="PassForge - Générateur de mots de passe sécurisé" />
+    <meta data-seo="og-description" property="og:description" content="Générez instantanément des mots de passe robustes et uniques dans votre navigateur." />
+    <meta data-seo="og-url" property="og:url" content="https://example.com/passforge/" />
+    <meta property="og:image" content="https://example.com/passforge/favicon.svg" />
+    <meta data-seo="og-locale" property="og:locale" content="fr_FR" />
+    <meta name="twitter:card" content="summary" />
+    <meta data-seo="twitter-title" name="twitter:title" content="PassForge - Générateur de mots de passe sécurisé" />
+    <meta data-seo="twitter-description" name="twitter:description" content="Générez instantanément des mots de passe robustes et uniques dans votre navigateur." />
+    <link data-seo="canonical" rel="canonical" href="https://example.com/passforge/" />
+    <link rel="alternate" hreflang="fr" href="https://example.com/passforge/" />
+    <link rel="alternate" hreflang="en" href="https://example.com/passforge/en/" />
+    <link rel="alternate" hreflang="de" href="https://example.com/passforge/de/" />
+    <link rel="alternate" hreflang="it" href="https://example.com/passforge/it/" />
+    <link rel="alternate" hreflang="es" href="https://example.com/passforge/es/" />
+    <link rel="alternate" hreflang="pt" href="https://example.com/passforge/pt/" />
+    <link rel="alternate" hreflang="x-default" href="https://example.com/passforge/" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./favicon.svg" />
+    <script id="structured-data" type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"PassForge","url":"https://example.com/passforge/","description":"Générez instantanément des mots de passe robustes et uniques dans votre navigateur.","applicationCategory":"SecurityApplication","operatingSystem":"Any","inLanguage":"fr","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}</script>
+    <title>PassForge - Générateur de mots de passe sécurisé</title>
+    <script>
+      (() => {
+        try {
+          const mode = localStorage.getItem('passforge.theme') || 'system';
+          const dark = mode === 'dark' || (mode === 'system' && matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.themeMode = mode;
+          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        } catch {}
+      })();
+    </script>
     <script type="module" src="/src/main.ts"></script>
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <div class="layout">
-      <header class="topbar">
-        <h1 data-i18n="appTitle">Minimal Password Forge</h1>
-      </header>
+    <div id="app">
+      <div class="app-shell">
+        <aside class="settings-sidebar" aria-labelledby="brand-title">
+          <header class="brand-header">
+            <a class="brand" href="./" aria-label="PassForge">
+              <img class="brand-logo" src="./favicon.svg" alt="" />
+              <span id="brand-title">PassForge</span>
+            </a>
+            <button class="icon-button mobile-close" id="closeSettings" type="button" data-i18n-aria-label="closeSettings">
+              <i data-lucide="x"></i>
+            </button>
+          </header>
 
-      <main class="surface">
-        <section class="panel" aria-labelledby="settings-title">
-          <h2 id="settings-title" data-i18n="settingsTitle">Configuration</h2>
-
-          <label class="inline" for="localeSelect">
-            <span data-i18n="languageLabel">Langue</span>
-            <select id="localeSelect" aria-label="Language selector">
-              <option value="fr">Français</option>
-              <option value="en">English</option>
-            </select>
-          </label>
-
-          <form id="generatorForm" autocomplete="off">
-            <fieldset class="grid-options">
-              <legend data-i18n="charsetLegend">Character set</legend>
-
-              <label class="option-row">
-                <input type="checkbox" id="digits" checked />
-                <span data-i18n="includeDigits">Include digits</span>
-              </label>
-              <label class="option-row">
-                <input type="checkbox" id="lowercase" checked />
-                <span data-i18n="includeLowercase">Include lowercase letters</span>
-              </label>
-              <label class="option-row">
-                <input type="checkbox" id="uppercase" checked />
-                <span data-i18n="includeUppercase">Include uppercase letters</span>
-              </label>
-              <label class="option-row">
-                <input type="checkbox" id="specials" checked />
-                <span data-i18n="includeSpecial">Include special characters</span>
-              </label>
-              <label class="option-row">
-                <input type="checkbox" id="excludeSimilar" />
-                <span data-i18n="excludeSimilar">Exclude similar characters</span>
-              </label>
-            </fieldset>
-
-            <label class="inline" for="length">
-              <span data-i18n="passwordLengthLabel">Password length</span>
-              <input
-                id="length"
-                type="number"
-                min="1"
-                max="128"
-                value="16"
-                step="1"
-                required
-              />
-            </label>
-
-            <label class="inline" for="count">
-              <span data-i18n="numberOfPasswordsLabel">Number of passwords</span>
-              <input
-                id="count"
-                type="number"
-                min="1"
-                max="50"
-                value="5"
-                step="1"
-                required
-              />
-            </label>
-
-            <div class="actions">
-              <button id="generateBtn" type="submit" data-i18n="generateButton">Generate</button>
-              <button id="resetBtn" type="button" data-i18n="resetButton">Reset</button>
+          <div class="settings-scroll">
+            <div class="sidebar-heading">
+              <i data-lucide="sliders-horizontal"></i>
+              <h1 data-i18n="settingsTitle">Configuration</h1>
             </div>
-          </form>
-        </section>
 
-        <section class="panel" aria-labelledby="results-title">
-          <div class="resultsHeader">
-            <h2 id="results-title" data-i18n="resultsTitle">Generated passwords</h2>
-            <button id="copyAllBtn" type="button" data-i18n="copyAllButton">Copy all</button>
+            <form id="generatorForm" autocomplete="off">
+              <fieldset class="option-group">
+                <legend data-i18n="charsetLegend">Jeux de caractères</legend>
+                <label class="check-row"><input type="checkbox" id="lowercase" checked /><span data-i18n="includeLowercase">Minuscules</span></label>
+                <label class="check-row"><input type="checkbox" id="uppercase" checked /><span data-i18n="includeUppercase">Majuscules</span></label>
+                <label class="check-row"><input type="checkbox" id="digits" checked /><span data-i18n="includeDigits">Chiffres</span></label>
+                <label class="check-row"><input type="checkbox" id="specials" checked /><span data-i18n="includeSpecial">Caractères spéciaux</span></label>
+                <label class="check-row separated-option"><input type="checkbox" id="excludeSimilar" /><span data-i18n="excludeSimilar">Exclure les caractères similaires</span></label>
+              </fieldset>
+
+              <label class="number-control" for="length">
+                <span data-i18n="passwordLengthLabel">Longueur</span>
+                <input id="length" type="number" min="1" max="128" value="16" step="1" required />
+              </label>
+              <label class="number-control" for="count">
+                <span data-i18n="numberOfPasswordsLabel">Quantité</span>
+                <input id="count" type="number" min="1" max="50" value="5" step="1" required />
+              </label>
+
+              <div class="form-actions">
+                <button class="primary-button" id="generateBtn" type="submit"><i data-lucide="sparkles"></i><span data-i18n="generateButton">Générer</span></button>
+                <button class="icon-button reset-button" id="resetBtn" type="button" data-i18n-aria-label="resetButton" title="Réinitialiser"><i data-lucide="rotate-ccw"></i></button>
+              </div>
+            </form>
           </div>
+        </aside>
 
-          <div id="status" aria-live="polite" role="status"></div>
-          <ul id="passwordList" aria-live="polite"></ul>
-          <p id="emptyState" class="muted" data-i18n="emptyState">No passwords yet.</p>
-        </section>
-      </main>
+        <button class="sidebar-backdrop" id="settingsBackdrop" type="button" tabindex="-1" aria-hidden="true"></button>
+
+        <main class="workspace">
+          <header class="topbar">
+            <div class="mobile-brand-row">
+              <a class="brand" href="./" aria-label="PassForge"><img class="brand-logo" src="./favicon.svg" alt="" /><span>PassForge</span></a>
+              <button class="icon-button" id="openSettings" type="button" data-i18n-aria-label="openSettings"><i data-lucide="sliders-horizontal"></i></button>
+            </div>
+
+            <div class="topbar-controls">
+              <label class="select-control">
+                <span data-i18n="themeLabel">Thème</span>
+                <select id="themeSelect">
+                  <option value="system" data-i18n="themeSystem">Système</option>
+                  <option value="light" data-i18n="themeLight">Clair</option>
+                  <option value="dark" data-i18n="themeDark">Sombre</option>
+                </select>
+              </label>
+              <label class="select-control">
+                <span data-i18n="languageLabel">Langue</span>
+                <select id="localeSelect">
+                  <option value="fr">FR</option><option value="en">EN</option><option value="de">DE</option>
+                  <option value="it">IT</option><option value="es">ES</option><option value="pt">PT</option>
+                </select>
+              </label>
+              <button class="icon-button layout-toggle" id="layoutToggle" type="button" data-i18n-aria-label="expandApp"><i data-lucide="maximize-2"></i></button>
+            </div>
+          </header>
+
+          <section class="results" aria-labelledby="results-title">
+            <div class="results-header">
+              <div>
+                <p class="eyebrow" data-i18n="secureGeneration">Génération locale sécurisée</p>
+                <h2 id="results-title" data-i18n="resultsTitle">Mots de passe générés</h2>
+              </div>
+              <button class="secondary-button" id="copyAllBtn" type="button" disabled><i data-lucide="copy"></i><span data-i18n="copyAllButton">Tout copier</span></button>
+            </div>
+            <div id="status" class="status" aria-live="polite" role="status"></div>
+            <div class="results-scroll">
+              <ul id="passwordList" aria-live="polite"></ul>
+              <div id="emptyState" class="empty-state"><i data-lucide="shield-check"></i><p data-i18n="emptyState">Configurez vos options puis générez vos mots de passe.</p></div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </body>
 </html>

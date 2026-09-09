@@ -1,0 +1,26 @@
+{
+  "fr": {
+    "title": "PassForge - Générateur de mots de passe sécurisé",
+    "description": "Générez instantanément des mots de passe robustes et uniques dans votre navigateur."
+  },
+  "en": {
+    "title": "PassForge - Secure password generator",
+    "description": "Generate strong, unique passwords instantly and securely in your browser."
+  },
+  "de": {
+    "title": "PassForge - Sicherer Passwortgenerator",
+    "description": "Erstellen Sie sofort starke und einzigartige Passwörter sicher in Ihrem Browser."
+  },
+  "it": {
+    "title": "PassForge - Generatore di password sicure",
+    "description": "Genera password robuste e uniche istantaneamente e in sicurezza nel tuo browser."
+  },
+  "es": {
+    "title": "PassForge - Generador de contraseñas seguro",
+    "description": "Genera contraseñas robustas y únicas al instante y de forma segura en tu navegador."
+  },
+  "pt": {
+    "title": "PassForge - Gerador de palavras-passe seguro",
+    "description": "Gere palavras-passe fortes e únicas instantaneamente e em segurança no navegador."
+  }
+}

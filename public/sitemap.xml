@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://example.com/passforge/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://example.com/passforge/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/passforge/en/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://example.com/passforge/de/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://example.com/passforge/it/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://example.com/passforge/es/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://example.com/passforge/pt/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/passforge/" />
+  </url>
+  <url><loc>https://example.com/passforge/en/</loc></url>
+  <url><loc>https://example.com/passforge/de/</loc></url>
+  <url><loc>https://example.com/passforge/it/</loc></url>
+  <url><loc>https://example.com/passforge/es/</loc></url>
+  <url><loc>https://example.com/passforge/pt/</loc></url>
+</urlset>

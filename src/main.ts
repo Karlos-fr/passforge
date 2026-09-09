@@ -1,18 +1,21 @@
 import {
-  dictionaries,
-  readLocale,
-  saveLocale,
-  type Locale,
-} from './i18n';
-import {
-  type PasswordOptions,
-  validateOptions,
-  generatePasswords,
-} from './generator';
-
-type UiState = {
-  locale: Locale;
-};
+  Check,
+  Copy,
+  Maximize2,
+  Minimize2,
+  RotateCcw,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sparkles,
+  X,
+  createIcons,
+} from 'lucide';
+import { generatePasswords, validateOptions, type PasswordOptions } from './generator';
+import { dictionaries, readLocale, saveLocale, supportedLocales, type I18nKey, type Locale } from './i18n';
+import { createLayoutStore } from './layout';
+import { updateSeoMetadata } from './seo';
+import { createThemeController, type ThemeMode } from './theme';
+import './styles.css';
 
 const DEFAULTS: PasswordOptions = {
   includeDigits: true,
@@ -25,254 +28,267 @@ const DEFAULTS: PasswordOptions = {
 };
 
 const elements = {
-  app: document.querySelector<HTMLSelectElement>('#localeSelect'),
-  form: document.querySelector<HTMLFormElement>('#generatorForm'),
-  digits: document.querySelector<HTMLInputElement>('#digits'),
-  lowercase: document.querySelector<HTMLInputElement>('#lowercase'),
-  uppercase: document.querySelector<HTMLInputElement>('#uppercase'),
-  specials: document.querySelector<HTMLInputElement>('#specials'),
-  excludeSimilar: document.querySelector<HTMLInputElement>('#excludeSimilar'),
-  length: document.querySelector<HTMLInputElement>('#length'),
-  count: document.querySelector<HTMLInputElement>('#count'),
-  generateButton: document.querySelector<HTMLButtonElement>('#generateBtn'),
-  resetButton: document.querySelector<HTMLButtonElement>('#resetBtn'),
-  copyAllButton: document.querySelector<HTMLButtonElement>('#copyAllBtn'),
-  list: document.querySelector<HTMLUListElement>('#passwordList'),
-  emptyState: document.querySelector<HTMLParagraphElement>('#emptyState'),
-  status: document.querySelector<HTMLElement>('#status'),
+  shell: required<HTMLElement>('.app-shell'),
+  sidebar: required<HTMLElement>('.settings-sidebar'),
+  form: required<HTMLFormElement>('#generatorForm'),
+  locale: required<HTMLSelectElement>('#localeSelect'),
+  theme: required<HTMLSelectElement>('#themeSelect'),
+  digits: required<HTMLInputElement>('#digits'),
+  lowercase: required<HTMLInputElement>('#lowercase'),
+  uppercase: required<HTMLInputElement>('#uppercase'),
+  specials: required<HTMLInputElement>('#specials'),
+  excludeSimilar: required<HTMLInputElement>('#excludeSimilar'),
+  length: required<HTMLInputElement>('#length'),
+  count: required<HTMLInputElement>('#count'),
+  generate: required<HTMLButtonElement>('#generateBtn'),
+  reset: required<HTMLButtonElement>('#resetBtn'),
+  copyAll: required<HTMLButtonElement>('#copyAllBtn'),
+  list: required<HTMLUListElement>('#passwordList'),
+  empty: required<HTMLElement>('#emptyState'),
+  status: required<HTMLElement>('#status'),
+  layout: required<HTMLButtonElement>('#layoutToggle'),
+  openSettings: required<HTMLButtonElement>('#openSettings'),
+  closeSettings: required<HTMLButtonElement>('#closeSettings'),
+  backdrop: required<HTMLButtonElement>('#settingsBackdrop'),
 };
 
-const state: UiState = {
+const storage = getStorage();
+const theme = createThemeController(document.documentElement, storage);
+const layout = createLayoutStore(storage);
+const state = {
   locale: readLocale(),
+  passwords: [] as string[],
+  expanded: layout.read(),
+  statusTimer: 0,
 };
 
-const appState = {
-  lastGenerated: [] as string[],
-};
-
-if (elements.app) {
-  elements.app.value = state.locale;
+function translate(key: I18nKey): string {
+  return dictionaries[state.locale][key];
 }
 
-function translate(key: string): string {
-  return dictionaries[state.locale][key] ?? dictionaries.fr[key] ?? key;
-}
+function applyLocaleUI(updateUrl = false): void {
+  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((element) => {
+    const key = element.dataset.i18n as I18nKey | undefined;
+    if (key) element.textContent = translate(key);
+  });
+  document.querySelectorAll<HTMLElement>('[data-i18n-aria-label]').forEach((element) => {
+    const key = element.dataset.i18nAriaLabel as I18nKey | undefined;
+    if (key) {
+      const label = translate(key);
+      element.setAttribute('aria-label', label);
+      element.setAttribute('title', label);
+    }
+  });
 
-function applyLocaleUI(): void {
-  document
-    .querySelectorAll<HTMLElement>('[data-i18n]')
-    .forEach((element) => {
-      const key = element.getAttribute('data-i18n');
-      if (!key) {
-        return;
-      }
-      const value = translate(key);
-      if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-        element.setAttribute('placeholder', value);
-        return;
-      }
-      if (element.tagName === 'BUTTON') {
-        element.textContent = value;
-        return;
-      }
-      element.textContent = value;
-    });
-
-  document.documentElement.lang = state.locale;
-  document.title = translate('appTitle');
-}
-
-function showStatus(messageKey: string, asError = false): void {
-  if (!elements.status) {
-    return;
-  }
-  elements.status.textContent = translate(messageKey);
-  elements.status.className = asError ? 'error' : '';
-  if (!asError) {
-    window.setTimeout(() => {
-      if (elements.status) {
-        elements.status.textContent = '';
-        elements.status.className = '';
-      }
-    }, 1400);
-  }
+  elements.locale.value = state.locale;
+  updateLayoutButton();
+  void updateSeoMetadata(state.locale, updateUrl);
 }
 
 function collectOptions(): PasswordOptions {
   return {
-    includeDigits: elements.digits?.checked ?? DEFAULTS.includeDigits,
-    includeLowercase: elements.lowercase?.checked ?? DEFAULTS.includeLowercase,
-    includeUppercase: elements.uppercase?.checked ?? DEFAULTS.includeUppercase,
-    includeSpecial: elements.specials?.checked ?? DEFAULTS.includeSpecial,
-    excludeSimilar: elements.excludeSimilar?.checked ?? DEFAULTS.excludeSimilar,
-    passwordLength: Number(elements.length?.value ?? DEFAULTS.passwordLength),
-    numberOfPasswords: Number(elements.count?.value ?? DEFAULTS.numberOfPasswords),
+    includeDigits: elements.digits.checked,
+    includeLowercase: elements.lowercase.checked,
+    includeUppercase: elements.uppercase.checked,
+    includeSpecial: elements.specials.checked,
+    excludeSimilar: elements.excludeSimilar.checked,
+    passwordLength: Number(elements.length.value),
+    numberOfPasswords: Number(elements.count.value),
   };
 }
 
 function updateGenerateAvailability(): void {
-  if (!elements.generateButton) {
-    return;
-  }
-
-  const options = collectOptions();
-  const errors = validateOptions(options);
-  elements.generateButton.disabled = errors.length > 0;
+  elements.generate.disabled = validateOptions(collectOptions()).length > 0;
 }
 
-function createPasswordItem(password: string, index: number): HTMLLIElement {
-  const li = document.createElement('li');
-  li.className = 'password-item';
+function renderPasswords(): void {
+  elements.list.replaceChildren();
+  elements.empty.hidden = state.passwords.length > 0;
+  elements.copyAll.disabled = state.passwords.length === 0;
 
-  const value = document.createElement('code');
-  value.className = 'password-value';
-  value.textContent = `${index + 1}. ${password}`;
+  state.passwords.forEach((password, index) => {
+    const item = document.createElement('li');
+    item.className = 'password-item';
 
-  const button = document.createElement('button');
-  button.type = 'button';
-  button.className = 'password-copy';
-  button.textContent = translate('copyButton');
-  button.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(password);
-      showStatus('copyOneSuccess');
-    } catch {
-      showStatus('copyFailure', true);
-    }
+    const position = document.createElement('span');
+    position.className = 'password-index';
+    position.textContent = String(index + 1).padStart(2, '0');
+
+    const value = document.createElement('code');
+    value.className = 'password-value';
+    value.textContent = password;
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'icon-button password-copy';
+    button.setAttribute('aria-label', translate('copyButton'));
+    button.setAttribute('title', translate('copyButton'));
+    button.innerHTML = '<i data-lucide="copy"></i>';
+    button.addEventListener('click', async () => {
+      if (await copyText(password)) {
+        button.innerHTML = '<i data-lucide="check"></i>';
+        renderIcons();
+        showStatus('copyOneSuccess');
+        window.setTimeout(() => {
+          button.innerHTML = '<i data-lucide="copy"></i>';
+          renderIcons();
+        }, 1200);
+      } else {
+        showStatus('copyFailure', true);
+      }
+    });
+
+    item.append(position, value, button);
+    elements.list.append(item);
   });
-
-  li.append(value, button);
-  return li;
+  renderIcons();
 }
 
-function renderPasswords(passwords: string[]): void {
-  if (!elements.list || !elements.emptyState) {
-    return;
-  }
-
-  elements.list.textContent = '';
-
-  if (passwords.length === 0) {
-    elements.emptyState.hidden = false;
-    appState.lastGenerated = [];
-    return;
-  }
-
-  appState.lastGenerated = passwords;
-  passwords.forEach((password, index) => {
-    elements.list.append(createPasswordItem(password, index));
-  });
-
-  elements.emptyState.hidden = true;
-  showStatus('copySuccess');
-}
-
-function onGenerate(event: Event): void {
+function generate(event: SubmitEvent): void {
   event.preventDefault();
   const options = collectOptions();
   const errors = validateOptions(options);
-
   if (errors.length > 0) {
-    const first = errors[0];
-    showStatus(first, true);
+    showStatus(errors[0], true);
     return;
   }
 
-  try {
-    const passwords = generatePasswords(options);
-    renderPasswords(passwords);
-  } catch {
-    showStatus('copyFailure', true);
-  }
+  state.passwords = generatePasswords(options);
+  renderPasswords();
+  showStatus('generatedSuccess');
+  closeSettings();
 }
 
-function resetToDefaults(): void {
-  if (elements.digits) elements.digits.checked = DEFAULTS.includeDigits;
-  if (elements.lowercase) elements.lowercase.checked = DEFAULTS.includeLowercase;
-  if (elements.uppercase) elements.uppercase.checked = DEFAULTS.includeUppercase;
-  if (elements.specials) elements.specials.checked = DEFAULTS.includeSpecial;
-  if (elements.excludeSimilar)
-    elements.excludeSimilar.checked = DEFAULTS.excludeSimilar;
-  if (elements.length) elements.length.value = String(DEFAULTS.passwordLength);
-  if (elements.count) elements.count.value = String(DEFAULTS.numberOfPasswords);
-
-  renderPasswords([]);
+function reset(): void {
+  elements.digits.checked = DEFAULTS.includeDigits;
+  elements.lowercase.checked = DEFAULTS.includeLowercase;
+  elements.uppercase.checked = DEFAULTS.includeUppercase;
+  elements.specials.checked = DEFAULTS.includeSpecial;
+  elements.excludeSimilar.checked = DEFAULTS.excludeSimilar;
+  elements.length.value = String(DEFAULTS.passwordLength);
+  elements.count.value = String(DEFAULTS.numberOfPasswords);
+  state.passwords = [];
+  renderPasswords();
   updateGenerateAvailability();
 }
 
+function showStatus(key: I18nKey, error = false): void {
+  window.clearTimeout(state.statusTimer);
+  elements.status.textContent = translate(key);
+  elements.status.classList.toggle('is-error', error);
+  state.statusTimer = window.setTimeout(() => {
+    elements.status.textContent = '';
+    elements.status.classList.remove('is-error');
+  }, 1800);
+}
+
+function updateLayoutButton(): void {
+  elements.shell.classList.toggle('is-expanded', state.expanded);
+  const key: I18nKey = state.expanded ? 'collapseApp' : 'expandApp';
+  elements.layout.setAttribute('aria-label', translate(key));
+  elements.layout.setAttribute('title', translate(key));
+  elements.layout.innerHTML = `<i data-lucide="${state.expanded ? 'minimize-2' : 'maximize-2'}"></i>`;
+  renderIcons();
+}
+
+function openSettings(): void {
+  elements.shell.classList.add('settings-open');
+  elements.sidebar.setAttribute('aria-hidden', 'false');
+  elements.closeSettings.focus();
+}
+
+function closeSettings(): void {
+  if (!elements.shell.classList.contains('settings-open')) return;
+  elements.shell.classList.remove('settings-open');
+  if (window.matchMedia('(max-width: 760px)').matches) {
+    elements.sidebar.setAttribute('aria-hidden', 'true');
+    elements.openSettings.focus();
+  }
+}
+
+async function copyText(value: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function bindEvents(): void {
-  elements.form?.addEventListener('submit', onGenerate);
-  elements.resetButton?.addEventListener('click', resetToDefaults);
+  elements.form.addEventListener('submit', generate);
+  elements.reset.addEventListener('click', reset);
+  [elements.digits, elements.lowercase, elements.uppercase, elements.specials, elements.excludeSimilar, elements.length, elements.count]
+    .forEach((element) => element.addEventListener('input', updateGenerateAvailability));
 
-  [
-    elements.digits,
-    elements.lowercase,
-    elements.uppercase,
-    elements.specials,
-    elements.excludeSimilar,
-    elements.length,
-    elements.count,
-  ].forEach((element) => {
-    element?.addEventListener('input', updateGenerateAvailability);
+  elements.locale.addEventListener('change', () => {
+    const locale = supportedLocales.find((candidate) => candidate === elements.locale.value);
+    if (!locale) return;
+    state.locale = locale;
+    saveLocale(locale);
+    applyLocaleUI(true);
+    renderPasswords();
   });
 
-  elements.app?.addEventListener('change', () => {
-    const value = elements.app?.value;
-    if (value === 'fr' || value === 'en') {
-      state.locale = value;
-      saveLocale(state.locale);
-      applyLocaleUI();
-      renderPasswords(appState.lastGenerated);
-      updateGenerateAvailability();
+  elements.theme.addEventListener('change', () => {
+    const value = elements.theme.value;
+    if (value === 'system' || value === 'light' || value === 'dark') {
+      theme.setMode(value as ThemeMode);
     }
   });
 
-  elements.copyAllButton?.addEventListener('click', async () => {
-    if (appState.lastGenerated.length === 0) {
-      showStatus('emptyState', true);
-      return;
-    }
+  elements.layout.addEventListener('click', () => {
+    state.expanded = !state.expanded;
+    layout.write(state.expanded);
+    updateLayoutButton();
+  });
 
-    try {
-      await navigator.clipboard.writeText(appState.lastGenerated.join('\n'));
-      showStatus('copyAllSuccess');
-    } catch {
-      showStatus('copyFailure', true);
-    }
+  elements.copyAll.addEventListener('click', async () => {
+    if (state.passwords.length === 0) return;
+    const copied = await copyText(state.passwords.join('\n'));
+    showStatus(copied ? 'copyAllSuccess' : 'copyFailure', !copied);
+  });
+  elements.openSettings.addEventListener('click', openSettings);
+  elements.closeSettings.addEventListener('click', closeSettings);
+  elements.backdrop.addEventListener('click', closeSettings);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeSettings();
+  });
+
+  const mobile = window.matchMedia('(max-width: 760px)');
+  mobile.addEventListener('change', ({ matches }) => {
+    elements.sidebar.setAttribute('aria-hidden', String(matches));
+    if (!matches) elements.shell.classList.remove('settings-open');
   });
 }
 
-function initializeForm(): void {
-  if (elements.length) {
-    elements.length.value = String(DEFAULTS.passwordLength);
-  }
+function renderIcons(): void {
+  createIcons({
+    icons: { Check, Copy, Maximize2, Minimize2, RotateCcw, ShieldCheck, SlidersHorizontal, Sparkles, X },
+    attrs: { 'aria-hidden': 'true', 'stroke-width': 1.8 },
+  });
+}
 
-  if (elements.count) {
-    elements.count.value = String(DEFAULTS.numberOfPasswords);
-  }
-
-  if (elements.digits) {
-    elements.digits.checked = DEFAULTS.includeDigits;
-  }
-
-  if (elements.lowercase) {
-    elements.lowercase.checked = DEFAULTS.includeLowercase;
-  }
-
-  if (elements.uppercase) {
-    elements.uppercase.checked = DEFAULTS.includeUppercase;
-  }
-
-  if (elements.specials) {
-    elements.specials.checked = DEFAULTS.includeSpecial;
+function getStorage(): Storage | null {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
   }
 }
 
+function required<T extends Element>(selector: string): T {
+  const element = document.querySelector<T>(selector);
+  if (!element) throw new Error(`Missing required element: ${selector}`);
+  return element;
+}
+
+elements.theme.value = theme.getMode();
+elements.shell.classList.toggle('is-expanded', state.expanded);
+if (window.matchMedia('(max-width: 760px)').matches) {
+  elements.sidebar.setAttribute('aria-hidden', 'true');
+}
 applyLocaleUI();
-initializeForm();
 bindEvents();
-updateGenerateAvailability();
-if (elements.emptyState) {
-  elements.emptyState.hidden = false;
-  elements.emptyState.textContent = translate('emptyState');
-}
+reset();
+renderIcons();

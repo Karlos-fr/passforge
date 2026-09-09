@@ -75,11 +75,19 @@ export function validateOptions(options: PasswordOptions): ValidationError[] {
     errors.push('validationAtLeastOne');
   }
 
-  if (!Number.isInteger(options.passwordLength) || options.passwordLength < 1) {
+  if (
+    !Number.isInteger(options.passwordLength) ||
+    options.passwordLength < 1 ||
+    options.passwordLength > 128
+  ) {
     errors.push('validationLength');
   }
 
-  if (!Number.isInteger(options.numberOfPasswords) || options.numberOfPasswords < 1) {
+  if (
+    !Number.isInteger(options.numberOfPasswords) ||
+    options.numberOfPasswords < 1 ||
+    options.numberOfPasswords > 50
+  ) {
     errors.push('validationCount');
   }
 
